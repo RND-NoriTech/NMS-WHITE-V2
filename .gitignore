@@ -49,3 +49,8 @@ pyvenv.cfg
 /.phpunit.cache/storage/pail
 /.nova
 /database/testing.sqlite
+
+# NMS-WHITE Phase 1 Docker runtime
+phase1/librenms-docker/examples/compose/db/
+phase1/librenms-docker/test/.env
+phase1/librenms-docker/test/compose.yml.backup-phase2-branding
