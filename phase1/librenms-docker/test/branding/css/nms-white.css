@@ -1,0 +1,200 @@
+/* =========================================================
+   NMS-WHITE Theme v1
+   LibreNMS 26.8.1
+   ========================================================= */
+
+:root {
+    --nms-blue: #0879d1;
+    --nms-blue-dark: #075a9d;
+    --nms-cyan: #00bfff;
+    --nms-navy: #123b63;
+    --nms-light: #e8f4fb;
+    --nms-border: #d7e5ef;
+    --nms-text: #243746;
+}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar.navbar-default {
+    background: #ffffff !important;
+    border-color: var(--nms-border) !important;
+    box-shadow: 0 1px 5px rgba(18, 59, 99, 0.08);
+}
+
+/* Main navigation links */
+.navbar-default .navbar-nav > li > a {
+    color: var(--nms-text) !important;
+    transition:
+        color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+/* Main navigation hover */
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: var(--nms-blue) !important;
+    background-color: var(--nms-light) !important;
+}
+
+/* Active/open navigation */
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    color: #ffffff !important;
+    background-color: var(--nms-blue) !important;
+}
+
+/* Navigation icons */
+.navbar-default .navbar-nav > li > a i {
+    color: var(--nms-blue);
+}
+
+.navbar-default .navbar-nav > .open > a i {
+    color: #ffffff;
+}
+
+/* =========================================================
+   DROPDOWN MENUS
+   ========================================================= */
+
+.navbar-default .dropdown-menu {
+    border-color: var(--nms-border) !important;
+    box-shadow: 0 5px 18px rgba(18, 59, 99, 0.12);
+}
+
+.navbar-default .dropdown-menu > li > a {
+    color: var(--nms-text) !important;
+}
+
+.navbar-default .dropdown-menu > li > a:hover,
+.navbar-default .dropdown-menu > li > a:focus {
+    color: var(--nms-blue) !important;
+    background-color: var(--nms-light) !important;
+}
+
+.navbar-default .dropdown-menu > li > a i {
+    color: var(--nms-blue);
+}
+
+/* Dropdown dividers */
+.navbar-default .dropdown-menu .divider {
+    background-color: var(--nms-border);
+}
+
+/* =========================================================
+   NAVBAR BRAND
+   ========================================================= */
+
+.navbar-default .navbar-brand {
+    background: #ffffff !important;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.navbar .global-search input {
+    border-color: var(--nms-border) !important;
+}
+
+.navbar .global-search input:focus {
+    border-color: var(--nms-blue) !important;
+    box-shadow: 0 0 0 2px rgba(8, 121, 209, 0.12) !important;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn-primary {
+    background-color: var(--nms-blue) !important;
+    border-color: var(--nms-blue-dark) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--nms-blue-dark) !important;
+    border-color: var(--nms-blue-dark) !important;
+}
+
+/* Info buttons */
+.btn-info {
+    background-color: var(--nms-cyan) !important;
+    border-color: #00a9df !important;
+}
+
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active {
+    background-color: #009ed1 !important;
+    border-color: #008fbd !important;
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+    color: var(--nms-blue);
+}
+
+a:hover,
+a:focus {
+    color: var(--nms-blue-dark);
+}
+
+/* =========================================================
+   FORM CONTROLS
+   ========================================================= */
+
+.form-control:focus {
+    border-color: var(--nms-blue) !important;
+    box-shadow: 0 0 0 2px rgba(8, 121, 209, 0.12) !important;
+}
+
+/* =========================================================
+   CARDS / PANELS
+   ========================================================= */
+
+.panel-primary {
+    border-color: var(--nms-blue) !important;
+}
+
+.panel-primary > .panel-heading {
+    background-color: var(--nms-blue) !important;
+    border-color: var(--nms-blue) !important;
+}
+
+/* =========================================================
+   TABLE HEADERS
+   ========================================================= */
+
+.table > thead > tr > th {
+    border-bottom-color: var(--nms-border);
+}
+
+/* =========================================================
+   STATUS COLORS
+   ========================================================= */
+
+/*
+ * IMPORTANT:
+ * Keep semantic alert colors intact.
+ * Red = critical/error
+ * Green = healthy/success
+ * Yellow = warning
+ *
+ * Branding must not hide operational meaning.
+ */
+
+/* =========================================================
+   NMS-WHITE FOCUS
+   ========================================================= */
+
+:focus-visible {
+    outline: 2px solid var(--nms-cyan);
+    outline-offset: 2px;
+}

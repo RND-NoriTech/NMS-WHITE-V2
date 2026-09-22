@@ -31,22 +31,39 @@ services:
     image: ${LIBRENMS_IMAGE:-librenms/librenms:latest}
     container_name: ${LIBRENMS_CONTAINER:-librenms}
     hostname: librenms
+
     cap_add:
       - NET_ADMIN
       - NET_RAW
+
     ports:
       - target: 8000
         published: 8000
         protocol: tcp
+
     depends_on:
       - db
       - redis
+
     volumes:
       - "librenms-data:/data"
-      - "./branding:/opt/librenms/html/images/custom:ro"
-      - "./css:/opt/librenms/html/css/custom:ro"
+
+      # NMS-WHITE branding images
+      - "./branding/images:/opt/librenms/html/images/custom:ro"
+
+      # NMS-WHITE custom CSS
+      - "./branding/css:/opt/librenms/html/css/custom:ro"
+
+      # NMS-WHITE favicon overrides
+      - "./branding/images/favicon-16x16.png:/opt/librenms/html/images/favicon-16x16.png:ro"
+      - "./branding/images/favicon-32x32.png:/opt/librenms/html/images/favicon-32x32.png:ro"
+
+      # Disable LibreNMS internal auto-update
+      #- "./config/librenms/autoupdate.php:/opt/librenms/config.d/autoupdate.php:ro"
+
     env_file:
       - "./librenms.env"
+
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
@@ -56,24 +73,33 @@ services:
       - "DB_USER=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
+
     restart: always
 
   dispatcher:
     image: ${LIBRENMS_IMAGE:-librenms/librenms:latest}
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
+
     cap_add:
       - NET_ADMIN
       - NET_RAW
+
     depends_on:
       - librenms
       - redis
+
     volumes:
       - "librenms-data:/data"
-      - "./branding:/opt/librenms/html/images/custom:ro"
-      - "./css:/opt/librenms/html/css/custom:ro"
+
+      # Same NMS-WHITE source layout
+      - "./branding/images:/opt/librenms/html/images/custom:ro"
+      - "./branding/css:/opt/librenms/html/css/custom:ro"
+      #- "./config/librenms/autoupdate.php:/opt/librenms/config.d/autoupdate.php:ro"
+
     env_file:
       - "./librenms.env"
+
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
@@ -85,29 +111,37 @@ services:
       - "DB_TIMEOUT=60"
       - "DISPATCHER_NODE_ID=dispatcher1"
       - "SIDECAR_DISPATCHER=1"
+
     restart: always
 
   syslogng:
     image: ${LIBRENMS_IMAGE:-librenms/librenms:latest}
     container_name: librenms_syslogng
     hostname: librenms-syslogng
+
     cap_add:
       - NET_ADMIN
       - NET_RAW
+
     depends_on:
       - librenms
       - redis
+
     ports:
       - target: 514
         published: 514
         protocol: tcp
+
       - target: 514
         published: 514
         protocol: udp
+
     volumes:
       - "librenms-data:/data"
+
     env_file:
       - "./librenms.env"
+
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
@@ -118,29 +152,37 @@ services:
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
       - "SIDECAR_SYSLOGNG=1"
+
     restart: always
 
   snmptrapd:
     image: ${LIBRENMS_IMAGE:-librenms/librenms:latest}
     container_name: librenms_snmptrapd
     hostname: librenms-snmptrapd
+
     cap_add:
       - NET_ADMIN
       - NET_RAW
+
     depends_on:
       - librenms
       - redis
+
     ports:
       - target: 162
         published: 162
         protocol: tcp
+
       - target: 162
         published: 162
         protocol: udp
+
     volumes:
       - "librenms-data:/data"
+
     env_file:
       - "./librenms.env"
+
     environment:
       - "TZ=${TZ}"
       - "PUID=${PUID}"
@@ -151,6 +193,7 @@ services:
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
       - "SIDECAR_SNMPTRAPD=1"
+
     restart: always
 
 volumes:
