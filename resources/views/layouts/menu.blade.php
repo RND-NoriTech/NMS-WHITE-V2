@@ -306,6 +306,33 @@
 
                     </ul>
                 </li>
+{{-- NMS-WHITE Sites --}}
+<li class="dropdown">
+    <a href="{{ route('sites.index') }}"
+       class="dropdown-toggle"
+       data-hover="dropdown"
+       data-toggle="dropdown">
+        <i class="fa fa-building fa-fw fa-lg fa-nav-icons" aria-hidden="true"></i>
+        <span class="tw:md:hidden tw:lg:inline-block">Sites</span>
+    </a>
+
+    <ul class="dropdown-menu">
+        <li>
+            <a href="{{ route('sites.index') }}">
+                <i class="fa fa-list fa-fw fa-lg" aria-hidden="true"></i>
+                Site List
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('sites.create') }}">
+                <i class="fa fa-plus fa-fw fa-lg" aria-hidden="true"></i>
+                Add Site
+            </a>
+        </li>
+    </ul>
+</li>
+
 {{-- Ports --}}
             @if($show_ports_menu)
                 <li class="dropdown">

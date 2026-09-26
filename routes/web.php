@@ -90,9 +90,52 @@ Route::prefix('auth')->name('socialite.')->group(function (): void {
     Route::get('{provider}/metadata', [SocialiteController::class, 'metadata'])->name('metadata');
 });
 
+
+Route::get(
+    'sites/{site}/devices',
+    [\App\Http\Controllers\NmsSiteDeviceController::class, 'index']
+)->name('sites.devices.index');
+
+Route::get(
+    'sites/{site}/devices/assign',
+    [\App\Http\Controllers\NmsSiteDeviceController::class, 'create']
+)->name('sites.devices.create');
+
+Route::post(
+    'sites/{site}/devices',
+    [\App\Http\Controllers\NmsSiteDeviceController::class, 'store']
+)->name('sites.devices.store');
+
+Route::delete(
+    'sites/{site}/devices/{siteDevice}',
+    [\App\Http\Controllers\NmsSiteDeviceController::class, 'destroy']
+)->name('sites.devices.destroy');
+
+Route::get(
+    'sites/{site}/devices/discover',
+    [\App\Http\Controllers\NmsSiteDeviceController::class, 'discover']
+)->name('sites.devices.discover');
+
+Route::post(
+    'sites/{site}/devices/discover',
+    [\App\Http\Controllers\NmsSiteDeviceController::class, 'discoverStore']
+)->name('sites.devices.discover.store');
+
 Route::get('graph/{path?}', GraphController::class)
     ->where('path', '.*')
     ->middleware(['web', AuthenticateGraph::class])->name('graph');
+
+
+Route::get(
+    'sites/{site}/network',
+    [\App\Http\Controllers\NmsSiteNetworkController::class, 'edit']
+)->name('sites.network.edit');
+
+Route::put(
+    'sites/{site}/network',
+    [\App\Http\Controllers\NmsSiteNetworkController::class, 'update']
+)->name('sites.network.update');
+
 
 // WebUI
 Route::middleware(['auth'])->group(function (): void {
@@ -170,6 +213,21 @@ Route::middleware(['auth'])->group(function (): void {
 
     Route::get('nac', [NacController::class, 'index']);
 
+
+Route::get(
+    'sites/{site}/teams/{team}/members/create',
+    [\App\Http\Controllers\NmsTeamMemberController::class, 'create']
+)->name('sites.teams.members.create');
+
+Route::post(
+    'sites/{site}/teams/{team}/members',
+    [\App\Http\Controllers\NmsTeamMemberController::class, 'store']
+)->name('sites.teams.members.store');
+
+Route::delete(
+    'sites/{site}/teams/{team}/members/{member}',
+    [\App\Http\Controllers\NmsTeamMemberController::class, 'destroy']
+)->name('sites.teams.members.destroy');
     // Device Tabs
     Route::get('/device/{device}/edit', [Device\EditDeviceController::class, 'index'])->name('device.edit');
     Route::put('/device/{device}/edit', [Device\EditDeviceController::class, 'update'])->name('device.edit.update');
@@ -235,6 +293,12 @@ Route::middleware(['auth'])->group(function (): void {
         Route::post('nodeimage/{image}', [CustomMapNodeImageController::class, 'update'])->name('maps.nodeimage.update');
     });
     Route::get('maps/devicedependency', [DeviceDependencyController::class, 'dependencyMap']);
+
+    // NMS-WHITE Sites
+    Route::resource('sites', \App\Http\Controllers\NmsSiteController::class);
+    Route::resource(
+                 'sites.teams',
+    \App\Http\Controllers\NmsTeamController::class);
 
     // dashboard
     Route::resource('dashboard', DashboardController::class)->except(['create', 'edit']);
@@ -413,6 +477,21 @@ Route::middleware(['auth'])->group(function (): void {
             Route::post('ssl-certificates', Table\SslCertificateController::class)->name('table.ssl-certificates');
         });
 
+Route::get(
+    'sites/{site}/teams/{team}/members/create',
+    [\App\Http\Controllers\NmsTeamMemberController::class, 'create']
+)->name('sites.teams.members.create');
+
+Route::post(
+    'sites/{site}/teams/{team}/members',
+    [\App\Http\Controllers\NmsTeamMemberController::class, 'store']
+)->name('sites.teams.members.store');
+
+Route::delete(
+    'sites/{site}/teams/{team}/members/{member}',
+    [\App\Http\Controllers\NmsTeamMemberController::class, 'destroy']
+)->name('sites.teams.members.destroy');
+
         // dashboard widgets
         Route::prefix('dash')->group(function (): void {
             Route::post('alerts', Widgets\AlertsController::class);
@@ -475,3 +554,5 @@ Route::any('/dummy_legacy_unauth/{path?}', [LegacyController::class, 'dummy']);
 Route::any('/{path?}', [LegacyController::class, 'index'])
     ->where('path', '^(?!api/v1($|/))((?!_debugbar).)*')
     ->middleware('auth');
+
+
