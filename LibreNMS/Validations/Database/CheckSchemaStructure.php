@@ -191,8 +191,12 @@ class CheckSchemaStructure implements Validation, ValidationFixer
         }
 
         foreach ($current_schema as $table => $data) {
-            $this->descriptions[] = "Database: extra table ($table)";
-            $this->schema_update[] = $this->dropTableSql($table);
+        if (str_starts_with($table, 'nms_')) {
+            continue;
+        }
+
+        $this->descriptions[] = "Database: extra table ($table)";
+        $this->schema_update[] = $this->dropTableSql($table);
         }
 
         // set utc timezone if timestamp issues
