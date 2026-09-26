@@ -213,6 +213,21 @@ Route::middleware(['auth'])->group(function (): void {
 
     Route::get('nac', [NacController::class, 'index']);
 
+//custom route ///
+    Route::resource(
+    'sites.hardware',
+    \App\Http\Controllers\NmsHardwareController::class
+)->except(['show']);
+Route::get(
+    'sites/{site}/hardware/{hardware}/password',
+    [\App\Http\Controllers\NmsHardwareController::class, 'revealPassword']
+)->name('sites.hardware.password');
+Route::get(
+    'sites/{site}/hardware-audits',
+    [\App\Http\Controllers\NmsHardwareController::class, 'auditIndex']
+)->name('sites.hardware.audit');
+
+///end of custom route ///
 
 Route::get(
     'sites/{site}/teams/{team}/members/create',

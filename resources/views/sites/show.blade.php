@@ -333,7 +333,7 @@
 
                     <div class="nms-module-actions">
 
-                        <a href="#"
+                        <a href="{{ route('sites.hardware.index', $site) }}"
                            class="btn btn-primary btn-sm nms-module-btn">
                             <i class="fa fa-cubes"></i>
                             Manage Hardware
