@@ -227,6 +227,40 @@ Route::get(
     [\App\Http\Controllers\NmsHardwareController::class, 'auditIndex']
 )->name('sites.hardware.audit');
 
+Route::get(
+    'sites/{site}/wifi/device/{device}/ports',
+    [\App\Http\Controllers\NmsWifiConnectionController::class, 'devicePorts']
+)->name('sites.wifi.device-ports');
+
+Route::get(
+    'sites/{site}/wifi/import',
+    [\App\Http\Controllers\NmsWifiConnectionController::class, 'importIndex']
+)->name('sites.wifi.import');
+
+Route::post(
+    'sites/{site}/wifi/import',
+    [\App\Http\Controllers\NmsWifiConnectionController::class, 'importStore']
+)->name('sites.wifi.import.store');
+
+Route::post(
+    'sites/{site}/wifi/{wifi}/sync',
+    [\App\Http\Controllers\NmsWifiConnectionController::class, 'sync']
+)->name('sites.wifi.sync');
+
+Route::resource(
+    'sites.wifi',
+    \App\Http\Controllers\NmsWifiConnectionController::class
+)->except(['show']);
+Route::get(
+    'sites/{site}/wifi/{wifi}/password',
+    [\App\Http\Controllers\NmsWifiConnectionController::class, 'revealPassword']
+)->name('sites.wifi.password');
+
+Route::resource(
+    'sites.vehicles',
+    \App\Http\Controllers\NmsVehicleController::class
+);
+
 ///end of custom route ///
 
 Route::get(

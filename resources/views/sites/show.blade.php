@@ -415,7 +415,7 @@
 
                     <div class="nms-module-actions">
 
-                        <a href="#"
+                        <a href="{{ route('sites.wifi.index', $site) }}"
                            class="btn btn-primary btn-sm nms-module-btn">
                             <i class="fa fa-wifi"></i>
                             Manage WiFi
@@ -456,7 +456,7 @@
 
                     <div class="nms-module-actions">
 
-                        <a href="#"
+                        <a href="{{ route('sites.vehicles.index', $site) }}"
                            class="btn btn-primary btn-sm nms-module-btn">
                             <i class="fa fa-bus"></i>
                             Manage Vehicles

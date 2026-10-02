@@ -32,4 +32,16 @@ public function network(): HasOne
 {
     return $this->hasOne(NmsSiteNetwork::class, 'site_id');
 }
+public function hardware(): HasMany
+{
+    return $this->hasMany(NmsHardware::class, 'site_id');
+}
+public function wifiConnections(): HasMany
+{
+    return $this->hasMany(NmsWifiConnection::class, 'site_id');
+}
+public function vehicles(): HasMany
+{
+    return $this->hasMany(NmsVehicle::class, 'site_id');
+}
 }
