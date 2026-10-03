@@ -256,10 +256,31 @@ Route::get(
     [\App\Http\Controllers\NmsWifiConnectionController::class, 'revealPassword']
 )->name('sites.wifi.password');
 
-Route::resource(
-    'sites.vehicles',
-    \App\Http\Controllers\NmsVehicleController::class
-);
+/*
+|--------------------------------------------------------------------------
+| VEHICLES MODULE RETIRED (NMS-WHITE)
+|--------------------------------------------------------------------------
+|
+| The vehicles UI and routes were retired in favour of the Site Device
+| Map / LLDP-CDP topology module. No data is dropped: the nms_vehicles
+| table and model remain available for future use.
+|
+| Route::resource(
+|     'sites.vehicles',
+|     \App\Http\Controllers\NmsVehicleController::class
+| );
+|
+*/
+
+Route::get(
+    'sites/{site}/topology',
+    [\App\Http\Controllers\NmsSiteTopologyController::class, 'index']
+)->name('sites.topology.index');
+
+Route::get(
+    'sites/{site}/topology/data',
+    [\App\Http\Controllers\NmsSiteTopologyController::class, 'data']
+)->name('sites.topology.data');
 
 ///end of custom route ///
 

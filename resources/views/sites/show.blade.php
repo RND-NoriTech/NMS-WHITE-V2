@@ -430,7 +430,7 @@
         </div>
 
 
-        {{-- VEHICLES --}}
+        {{-- DEVICE MAP --}}
         <div class="col-md-4 col-sm-6">
 
             <div class="panel panel-default nms-module-card">
@@ -440,13 +440,13 @@
                     <div class="nms-module-head">
 
                         <div class="nms-module-icon">
-                            <i class="fa fa-bus"></i>
+                            <i class="fa fa-share-alt"></i>
                         </div>
 
                         <div>
-                            <h4 class="nms-module-title">Vehicles</h4>
+                            <h4 class="nms-module-title">Device Map</h4>
                             <div class="nms-module-desc">
-                                NADI vehicle tracking
+                                LLDP / CDP network topology
                             </div>
                         </div>
 
@@ -456,10 +456,10 @@
 
                     <div class="nms-module-actions">
 
-                        <a href="{{ route('sites.vehicles.index', $site) }}"
+                        <a href="{{ route('sites.topology.index', $site) }}"
                            class="btn btn-primary btn-sm nms-module-btn">
-                            <i class="fa fa-bus"></i>
-                            Manage Vehicles
+                            <i class="fa fa-share-alt"></i>
+                            View Device Map
                         </a>
 
                     </div>
