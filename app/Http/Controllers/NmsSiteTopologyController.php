@@ -9,7 +9,10 @@ use App\Models\NmsSiteDevice;
 use App\Models\Port;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use LibreNMS\Util\Number;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
+use Symfony\Component\Process\Process;
 
 /*
 |--------------------------------------------------------------------------
@@ -244,6 +247,135 @@ class NmsSiteTopologyController extends Controller
                 'links' => count($edges),
             ]
         ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | REFRESH: LIBRENMS DISCOVERY FOR ALL SITE DEVICES
+    |--------------------------------------------------------------------------
+    |
+    | Uses the official LibreNMS CLI (./lnms device:discover <device_id>)
+    | for every LibreNMS device assigned to the Site through
+    | nms_site_devices. Discovered-only neighbors are never discovered
+    | here; the normal scheduled LibreNMS discovery stays unchanged and
+    | nothing runs on page load.
+    |
+    | Execution is server-side only via Symfony Process with array
+    | arguments (no shell, no injected input; device IDs come from the
+    | database only). It runs in the current web application context:
+    | sudo is never used. If permissions prevent execution this is
+    | reported per device instead of failing silently.
+    |
+    */
+
+    public function refresh(NmsSite $site): JsonResponse
+    {
+        /*
+        |--------------------------------------------------------------------------
+        | DEVICES ASSIGNED TO THIS SITE (DATABASE IDs ONLY)
+        |--------------------------------------------------------------------------
+        |
+        | Arbitrary device IDs from the request are never accepted.
+        |
+        */
+
+        $mappedIds = NmsSiteDevice::where('site_id', $site->id)
+            ->pluck('device_id')
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->filter(fn ($id) => $id > 0)
+            ->values();
+
+        $existing = Device::whereIn('device_id', $mappedIds->all())
+            ->pluck('device_id')
+            ->map(fn ($id) => (int) $id);
+
+        $missing = $mappedIds->diff($existing)->values();
+
+        /*
+        |--------------------------------------------------------------------------
+        | RUN ./lnms device:discover PER DEVICE
+        |--------------------------------------------------------------------------
+        |
+        | One failing device never stops the remaining devices; results and
+        | partial failures are collected per device. Each device gets its
+        | own timeout (300s).
+        |
+        */
+
+        @set_time_limit(0);
+
+        $results = [];
+        $failures = 0;
+
+        foreach ($existing as $deviceId) {
+            $process = new Process(
+                [base_path('lnms'), 'device:discover', (string) $deviceId],
+                base_path(),
+                null,
+                null,
+                300.0
+            );
+
+            try {
+                $process->run();
+
+                if ($process->isSuccessful()) {
+                    $results[] = [
+                        'device_id' => $deviceId,
+                        'success' => true,
+                        'message' => 'Discovery completed',
+                    ];
+                } else {
+                    $failures++;
+
+                    $output = trim((string) $process->getErrorOutput() ?: (string) $process->getOutput());
+
+                    $results[] = [
+                        'device_id' => $deviceId,
+                        'success' => false,
+                        'message' => $output !== '' ? Str::limit($output, 240) : 'Discovery failed',
+                    ];
+                }
+            } catch (ProcessTimedOutException) {
+                $failures++;
+
+                $results[] = [
+                    'device_id' => $deviceId,
+                    'success' => false,
+                    'message' => 'Discovery timed out',
+                ];
+            } catch (\Throwable $e) {
+                $failures++;
+
+                $results[] = [
+                    'device_id' => $deviceId,
+                    'success' => false,
+                    'message' => 'Could not run discovery: ' . Str::limit($e->getMessage(), 240),
+                ];
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | STALE SITE ASSIGNMENTS (DEVICE NO LONGER IN LIBRENMS)
+        |--------------------------------------------------------------------------
+        */
+
+        foreach ($missing as $deviceId) {
+            $failures++;
+
+            $results[] = [
+                'device_id' => $deviceId,
+                'success' => false,
+                'message' => 'Device is assigned to the Site but no longer exists in the monitoring system',
+            ];
+        }
+
+        return response()->json([
+            'success' => $failures === 0,
+            'devices' => $results,
+        ]);
     }
 
     /*

@@ -98,10 +98,15 @@
                 <span class="label label-default">Discovered Neighbor</span>
 
                 <span class="text-muted" style="margin-left:10px;">
-                    Data source: LibreNMS LLDP / CDP discovery (no direct device polling)
+                    Data source: NMS-WHITE LLDP / CDP discovery (no direct device polling)
                 </span>
 
             </div>
+
+
+            {{-- STATUS AREA FOR REFRESH / DISCOVERY MESSAGES --}}
+            <div id="nms-topology-status"
+                 style="margin-bottom:10px;"></div>
 
 
             {{-- NO LLDP/CDP DATA STATE --}}
@@ -114,7 +119,7 @@
 
                 <br>
                 Ensure LLDP or CDP is enabled on the network devices and run
-                LibreNMS discovery.
+                NMS-WHITE discovery.
 
             </div>
 
@@ -184,10 +189,9 @@
 
 @endsection
 
-@section('javascript')
-
-<script src="{{ asset('js/vis-network.min.js') }}"></script>
-<script src="{{ asset('js/vis-data.min.js') }}"></script>
+{{-- Library assets load in <head> exactly like the native device
+     Neighbours map. The init script runs after content via the scripts stack. --}}
+@push('scripts')
 
 <script>
 
@@ -252,37 +256,59 @@ function topologyOsDisplay(item)
 |--------------------------------------------------------------------------
 */
 
+function topologyShowError(message)
+{
+    const container = document.getElementById('nms-topology-map');
+
+    if (!container) {
+        window.alert(message);
+        return;
+    }
+
+    container.innerHTML = '<div class="alert alert-danger" style="margin:12px;">'
+        + topologyEscape(message) + '</div>';
+}
+
+
 function topologyLoad()
 {
     $('#nms-topology-details').hide();
     $('#nms-topology-hint').show();
 
-    $.getJSON('{{ route('sites.topology.data', $site) }}', function (data) {
+    $.getJSON('{{ route('sites.topology.data', $site) }}')
+        .done(function (data) {
 
-        topologyNodesById = {};
-        topologyEdgesById = {};
+            topologyNodesById = {};
+            topologyEdgesById = {};
 
-        (data.nodes || []).forEach(function (node) {
-            topologyNodesById[node.id] = node;
+            (data.nodes || []).forEach(function (node) {
+                topologyNodesById[node.id] = node;
+            });
+
+            (data.edges || []).forEach(function (edge) {
+                topologyEdgesById[edge.id] = edge;
+            });
+
+            const hasLinks = ((data.summary || {}).links || 0) > 0;
+
+            $('#nms-topology-no-data').toggle(!hasLinks);
+
+            if (!hasLinks) {
+                $('#nms-topology-map').empty();
+                topologyNetwork = null;
+                return;
+            }
+
+            topologyRender(data);
+        })
+        .fail(function (xhr, textStatus, errorThrown) {
+
+            const message = 'Unable to load topology data'
+                + (xhr && xhr.status ? ' (HTTP ' + xhr.status + ')' : '')
+                + (errorThrown ? ': ' + errorThrown : '.');
+
+            topologyShowError(message);
         });
-
-        (data.edges || []).forEach(function (edge) {
-            topologyEdgesById[edge.id] = edge;
-        });
-
-        $('#nms-topology-no-data').toggle(
-            (data.summary || { links: 0 }).links === 0
-        );
-
-        if ((data.summary || { links: 0 }).links === 0) {
-            $('#nms-topology-map').empty();
-            topologyNetwork = null;
-            return;
-        }
-
-        topologyRender(data);
-
-    });
 }
 
 
@@ -294,6 +320,35 @@ function topologyLoad()
 
 function topologyRender(data)
 {
+    const container = document.getElementById('nms-topology-map');
+
+    if (!container) {
+        return;
+    }
+
+    /*
+     * Defensive: the visualization library must be present, otherwise the
+     * canvas would stay silently blank.
+     */
+
+    if (
+        typeof vis === 'undefined'
+        || typeof vis.DataSet === 'undefined'
+        || typeof vis.Network === 'undefined'
+    ) {
+        topologyShowError('Unable to load topology visualization library.');
+        return;
+    }
+
+    /*
+     * The container must have a usable, visible height before the network
+     * is constructed or the canvas renders with zero height.
+     */
+
+    if (!container.offsetHeight) {
+        container.style.height = '620px';
+    }
+
     const nodes = new vis.DataSet(
         (data.nodes || []).map(function (node) {
             return topologyNodeStyle(node);
@@ -321,8 +376,6 @@ function topologyRender(data)
             };
         })
     );
-
-    const container = document.getElementById('nms-topology-map');
 
     if (topologyNetwork) {
         topologyNetwork.destroy();
@@ -557,7 +610,7 @@ function topologyShowNode(node)
             ]);
         }
 
-        rows.push(['LibreNMS Device ID', node.device_id]);
+        rows.push(['Device ID', node.device_id]);
 
         actions = '<a href="' + node.device_url + '" class="btn btn-primary btn-xs">'
             + '<i class="fa fa-external-link"></i> Open Device</a> '
@@ -642,21 +695,133 @@ function topologyShowLink(edge)
 
 /*
 |--------------------------------------------------------------------------
-| CONTROLS
+| STATUS AREA (VISIBLE REFRESH / DISCOVERY MESSAGES)
 |--------------------------------------------------------------------------
 */
 
-$('#nms-topology-refresh').on('click', function () {
-    topologyLoad();
-});
+function topologyShowStatus(messages, level)
+{
+    const html = messages
+        .map(function (message) {
+            return topologyEscape(message);
+        })
+        .join('<br>');
 
-$('#nms-topology-fit').on('click', function () {
-    if (topologyNetwork) {
-        topologyNetwork.fit({ animation: false });
+    $('#nms-topology-status')
+        .html('<div class="alert alert-' + (level || 'success') + '" style="margin-bottom:10px;">'
+            + html + '</div>');
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| INITIALIZE (AFTER DOM READY AND ASSETS LOADED)
+|--------------------------------------------------------------------------
+*/
+
+$(function () {
+
+    /*
+     * DOM ready: the container and controls exist now. The library assets
+     * load in <head>, so they are available before this runs.
+     */
+
+    const container = document.getElementById('nms-topology-map');
+
+    if (!container) {
+        return;
     }
+
+    if (
+        typeof vis === 'undefined'
+        || typeof vis.DataSet === 'undefined'
+        || typeof vis.Network === 'undefined'
+    ) {
+        topologyShowError('Unable to load topology visualization library.');
+        return;
+    }
+
+    /*
+     * Refresh: server-side discovery via sites.topology.refresh (the CSRF
+     * header is attached to all requests by the layout's global jQuery
+     * setup). After the POST completes, topology data is reloaded and the
+     * map is redrawn; the button is always restored.
+     */
+
+    $('#nms-topology-refresh').on('click', function () {
+
+        const button = $(this);
+        const fitButton = $('#nms-topology-fit');
+        const originalHtml = button.html();
+
+        if (button.prop('disabled')) {
+            return;
+        }
+
+        button.prop('disabled', true);
+        button.html('<i class="fa fa-spinner fa-spin"></i> Discovering...');
+        fitButton.prop('disabled', true);
+
+        $.post('{{ route('sites.topology.refresh', $site) }}')
+            .done(function (response) {
+
+                const devices = response.devices || [];
+                const statusMessages = [];
+
+                if (!devices.length) {
+                    statusMessages.push('No managed devices are assigned to this Site.');
+                }
+
+                devices.forEach(function (device) {
+                    if (!device.success) {
+                        statusMessages.push(
+                            'Discovery failed for device ' + device.device_id
+                            + (device.message ? ': ' + device.message : '')
+                        );
+                    }
+                });
+
+                if (devices.length && !statusMessages.length) {
+                    statusMessages.push('Topology discovery completed');
+                }
+
+                if (statusMessages.length) {
+                    topologyShowStatus(statusMessages, statusMessages.length === 1 ? 'success' : 'warning');
+                }
+            })
+            .fail(function (xhr) {
+                topologyShowStatus(
+                    ['Refresh request failed' + (xhr.status ? ' (HTTP ' + xhr.status + ')' : '') + '.'],
+                    'danger'
+                );
+            })
+            .always(function () {
+                button.prop('disabled', false).html(originalHtml);
+                fitButton.prop('disabled', false);
+
+                /*
+                 * Reload topology data and redraw the map after discovery.
+                 */
+
+                topologyLoad();
+            });
+    });
+
+    $('#nms-topology-fit').on('click', function () {
+        if (topologyNetwork) {
+            topologyNetwork.fit({ animation: false });
+        }
+    });
+
+    topologyLoad();
+
 });
 
+</script>
 
-topologyLoad();
+@endpush
 
+@section('javascript')
+<script src="{{ url('js/vis-network.min.js') }}"></script>
+<script src="{{ url('js/vis-data.min.js') }}"></script>
 @endsection
