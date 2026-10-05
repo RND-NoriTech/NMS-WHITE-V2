@@ -41,7 +41,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label>LibreNMS Device</label>
+                    <label>Managed Device</label>
 
                     <select name="device_id"
                             class="form-control"

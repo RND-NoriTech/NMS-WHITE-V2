@@ -82,7 +82,7 @@
 
                             <small class="text-muted">
                                 Used for optional metadata enrichment.
-                                Monitoring always comes from LibreNMS / SNMP.
+                                Monitoring always comes from NMS-WHITE / SNMP.
                             </small>
                         </div>
                     </div>
@@ -248,7 +248,7 @@
                                     class="form-control">
 
                                 <option value="snmp">
-                                    SNMP / LibreNMS
+                                    SNMP / NMS-WHITE
                                 </option>
 
                                 <option value="api">
@@ -307,7 +307,7 @@
                                     class="form-control">
 
                                 <option value="">
-                                    -- Select LibreNMS Device --
+                                    -- Select Managed Device --
                                 </option>
 
                                 @foreach($managedDevices as $device)
@@ -320,8 +320,8 @@
                             </select>
 
                             <small class="text-muted">
-                                Only LibreNMS devices already assigned to this site are shown.
-                                Monitoring status is reused from LibreNMS.
+                                Only managed devices already assigned to this site are shown.
+                                Monitoring status is reused from NMS-WHITE.
                             </small>
 
                             <div style="margin-top:5px;">
@@ -365,7 +365,7 @@
                             </select>
 
                             <small class="text-muted">
-                                Interfaces are loaded from LibreNMS when a Managed Device is selected.
+                                Interfaces are loaded from NMS-WHITE when a Managed Device is selected.
                             </small>
 
                         </div>

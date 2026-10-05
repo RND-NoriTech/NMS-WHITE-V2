@@ -54,7 +54,7 @@
                 <div class="alert alert-info"
                      style="margin-bottom:0;">
 
-                    No unlinked wireless-looking interfaces found on the LibreNMS devices
+                    No unlinked wireless-looking interfaces found on the managed devices
                     assigned to this site. Use
                     <a href="{{ route('sites.devices.discover', $site) }}">Add / Discover Device</a>
                     if a device is missing.
@@ -64,9 +64,9 @@
             @else
 
                 <p>
-                    Select the LibreNMS wireless interfaces to import as WiFi records.
-                    Each record will use SNMP / LibreNMS monitoring and derive its
-                    status from LibreNMS. SSID can be filled in later.
+                    Select the managed wireless interfaces to import as WiFi records.
+                    Each record will use SNMP / NMS-WHITE monitoring and derive its
+                    status from NMS-WHITE. SSID can be filled in later.
                 </p>
 
 
