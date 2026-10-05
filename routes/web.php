@@ -91,54 +91,55 @@ Route::prefix('auth')->name('socialite.')->group(function (): void {
 });
 
 
-Route::get(
-    'sites/{site}/devices',
-    [\App\Http\Controllers\NmsSiteDeviceController::class, 'index']
-)->name('sites.devices.index');
-
-Route::get(
-    'sites/{site}/devices/assign',
-    [\App\Http\Controllers\NmsSiteDeviceController::class, 'create']
-)->name('sites.devices.create');
-
-Route::post(
-    'sites/{site}/devices',
-    [\App\Http\Controllers\NmsSiteDeviceController::class, 'store']
-)->name('sites.devices.store');
-
-Route::delete(
-    'sites/{site}/devices/{siteDevice}',
-    [\App\Http\Controllers\NmsSiteDeviceController::class, 'destroy']
-)->name('sites.devices.destroy');
-
-Route::get(
-    'sites/{site}/devices/discover',
-    [\App\Http\Controllers\NmsSiteDeviceController::class, 'discover']
-)->name('sites.devices.discover');
-
-Route::post(
-    'sites/{site}/devices/discover',
-    [\App\Http\Controllers\NmsSiteDeviceController::class, 'discoverStore']
-)->name('sites.devices.discover.store');
-
+// WebUI (NMS-WHITE: site devices/network routes live inside the auth group below)
 Route::get('graph/{path?}', GraphController::class)
     ->where('path', '.*')
     ->middleware(['web', AuthenticateGraph::class])->name('graph');
 
 
-Route::get(
-    'sites/{site}/network',
-    [\App\Http\Controllers\NmsSiteNetworkController::class, 'edit']
-)->name('sites.network.edit');
-
-Route::put(
-    'sites/{site}/network',
-    [\App\Http\Controllers\NmsSiteNetworkController::class, 'update']
-)->name('sites.network.update');
-
-
 // WebUI
 Route::middleware(['auth'])->group(function (): void {
+    // NMS-WHITE: site devices/network (auth-protected; moved inside the group)
+    Route::get(
+        'sites/{site}/devices',
+        [\App\Http\Controllers\NmsSiteDeviceController::class, 'index']
+    )->name('sites.devices.index');
+
+    Route::get(
+        'sites/{site}/devices/assign',
+        [\App\Http\Controllers\NmsSiteDeviceController::class, 'create']
+    )->name('sites.devices.create');
+
+    Route::post(
+        'sites/{site}/devices',
+        [\App\Http\Controllers\NmsSiteDeviceController::class, 'store']
+    )->name('sites.devices.store');
+
+    Route::delete(
+        'sites/{site}/devices/{siteDevice}',
+        [\App\Http\Controllers\NmsSiteDeviceController::class, 'destroy']
+    )->name('sites.devices.destroy');
+
+    Route::get(
+        'sites/{site}/devices/discover',
+        [\App\Http\Controllers\NmsSiteDeviceController::class, 'discover']
+    )->name('sites.devices.discover');
+
+    Route::post(
+        'sites/{site}/devices/discover',
+        [\App\Http\Controllers\NmsSiteDeviceController::class, 'discoverStore']
+    )->name('sites.devices.discover.store');
+
+    Route::get(
+        'sites/{site}/network',
+        [\App\Http\Controllers\NmsSiteNetworkController::class, 'edit']
+    )->name('sites.network.edit');
+
+    Route::put(
+        'sites/{site}/network',
+        [\App\Http\Controllers\NmsSiteNetworkController::class, 'update']
+    )->name('sites.network.update');
+
     // pages
     Route::post('alert/{alert}/ack', [AlertController::class, 'ack'])->name('alert.ack');
     Route::get('devices/{view?}/{graph?}/{vars?}', [DevicesController::class, 'index'])->where('vars', '.*')
@@ -281,6 +282,11 @@ Route::get(
     'sites/{site}/topology/data',
     [\App\Http\Controllers\NmsSiteTopologyController::class, 'data']
 )->name('sites.topology.data');
+
+Route::post(
+    'sites/{site}/topology/refresh',
+    [\App\Http\Controllers\NmsSiteTopologyController::class, 'refresh']
+)->name('sites.topology.refresh');
 
 ///end of custom route ///
 
