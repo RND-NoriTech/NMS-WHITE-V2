@@ -2238,7 +2238,7 @@
             }
         },
         "email_user": {
-            "default": "LibreNMS",
+            "default": "NMS-WHITE",
             "group": "alerting",
             "section": "email",
             "order": 1,
@@ -6419,7 +6419,7 @@
             "type": "text"
         },
         "project_name": {
-            "default": "LibreNMS",
+            "default": "NMS-WHITE",
             "type": "text"
         },
         "prometheus.enable": {

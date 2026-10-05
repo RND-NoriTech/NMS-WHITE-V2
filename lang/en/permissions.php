@@ -5,9 +5,9 @@ return [
         'title' => 'Devices',
         'viewAll' => ['label' => 'View All Devices', 'description' => 'View all devices'],
         'view' => ['label' => 'View Device Details', 'description' => 'View devices the user can access'],
-        'create' => ['label' => 'Add Devices', 'description' => 'Add new devices to LibreNMS'],
+        'create' => ['label' => 'Add Devices', 'description' => 'Add new devices to NMS-WHITE'],
         'update' => ['label' => 'Edit Devices', 'description' => 'Modify device settings'],
-        'delete' => ['label' => 'Delete Devices', 'description' => 'Remove devices from LibreNMS'],
+        'delete' => ['label' => 'Delete Devices', 'description' => 'Remove devices from NMS-WHITE'],
         'debug' => ['label' => 'Debug Devices', 'description' => 'Run snmpwalk and other debug commands on devices'],
         'updateNotes' => ['label' => 'Update Device Notes', 'description' => 'Update device notes'],
     ],
@@ -62,7 +62,7 @@ return [
 
     'api' => [
         'title' => 'API Access',
-        'access' => ['label' => 'API Access', 'description' => 'Access the LibreNMS REST API'],
+        'access' => ['label' => 'API Access', 'description' => 'Access the NMS-WHITE REST API'],
     ],
 
     'application' => [
@@ -157,7 +157,7 @@ return [
         'title' => 'Pollers',
         'view' => ['label' => 'View Pollers', 'description' => 'View poller information and status'],
         'update' => ['label' => 'Edit Pollers', 'description' => 'Modify poller settings'],
-        'delete' => ['label' => 'Delete Pollers', 'description' => 'Remove pollers from LibreNMS'],
+        'delete' => ['label' => 'Delete Pollers', 'description' => 'Remove pollers from NMS-WHITE'],
     ],
 
     'poller-group' => [
@@ -227,8 +227,8 @@ return [
 
     'settings' => [
         'title' => 'Settings',
-        'view' => ['label' => 'View Settings', 'description' => 'View global LibreNMS settings'],
-        'update' => ['label' => 'Edit Settings', 'description' => 'Modify global LibreNMS settings'],
+        'view' => ['label' => 'View Settings', 'description' => 'View global NMS-WHITE settings'],
+        'update' => ['label' => 'Edit Settings', 'description' => 'Modify global NMS-WHITE settings'],
     ],
 
     'syslog' => [

@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-md-6">
 
-            <h3>{{ __('LibreNMS is an autodiscovering PHP/MySQL-based network monitoring system') }}</h3>
+            <h3>{{ __('NMS-WHITE is an autodiscovering PHP/MySQL-based network monitoring system') }}</h3>
             <table class='table table-condensed table-hover'>
                 <tr>
                     <td><b>{{ __('Version') }}</b></td>
@@ -64,7 +64,7 @@
                 </tr>
             </table>
 
-          <h3>{{ __('LibreNMS is a community-based project') }}</h3>
+          <h3>{{ __('NMS-WHITE is a community-based project') }}</h3>
           <p>
             {{ __('Please feel free to join us and contribute code, documentation, and bug reports:') }}
             <br />
@@ -184,7 +184,7 @@
 
         <h3>{{ __('License') }}</h3>
         <pre>
-Copyright (C) 2013-{{ date('Y') }} {{ $project_name }} Contributors
+Copyright (C) 2013-{{ date('Y') }} LibreNMS Contributors
 Copyright (C) 2006-2012 Adam Armstrong
 
 This program is free software: you can redistribute it and/or modify

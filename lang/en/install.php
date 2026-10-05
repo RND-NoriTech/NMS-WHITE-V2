@@ -38,7 +38,7 @@ return [
         'retry' => 'Retry',
         'settings' => 'Additional Settings',
         'success' => 'Install Complete',
-        'thanks' => 'Thank you for setting up LibreNMS.',
+        'thanks' => 'Thank you for setting up NMS-WHITE.',
         'title' => 'Finish Install',
         'validate_button' => 'Validate Install',
     ],
@@ -58,7 +58,7 @@ return [
         'migrate' => 'Build Database',
         'user' => 'Create User',
     ],
-    'title' => 'LibreNMS Install',
+    'title' => 'NMS-WHITE Install',
     'user' => [
         'button' => 'Add User',
         'created' => 'User Created',

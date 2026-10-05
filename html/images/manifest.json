@@ -1,6 +1,6 @@
 {
-    "short_name": "LibreNMS",
-    "name": "LibreNMS: Network Monitoring",
+    "short_name": "NMS-WHITE",
+    "name": "NMS-WHITE: Network Monitoring",
     "description": "A fully featured network monitoring system that provides a wealth of features and device support",
     "icons": [
         {

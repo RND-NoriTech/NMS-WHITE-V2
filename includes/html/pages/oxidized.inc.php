@@ -73,7 +73,7 @@ $no_refresh = true;
                         <div class="col-sm-8 actionBar">\
                             <span class="pull-left">\
                                 <button type="submit" class="btn btn-success btn-sm" name="btn-reload-nodes" id="btn-reload-nodes"\
-                                title="Update Oxidized\'s node list from LibreNMS data"><i class="fa fa-refresh"></i>\
+                                title="Update Oxidized\'s node list from NMS-WHITE data"><i class="fa fa-refresh"></i>\
                                 Reload node list</button>\
                             </span>\
                         </div>\

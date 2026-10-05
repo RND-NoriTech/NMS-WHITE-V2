@@ -86,8 +86,8 @@ return [
         ],
         'rrd' => [
             'CheckRrdVersion' => [
-                'fail' => 'rrdtool version :installed_version is too old, LibreNMS requires a minimum version of 1.5.5',
-                'fail_config' => 'The rrdtool_version :config_version you have specified is too old, LibreNMS requires a minimum version of 1.5.5',
+                'fail' => 'rrdtool version :installed_version is too old, NMS-WHITE requires a minimum version of 1.5.5',
+                'fail_config' => 'The rrdtool_version :config_version you have specified is too old, NMS-WHITE requires a minimum version of 1.5.5',
                 'fix' => 'Either comment out or delete $config[\'rrdtool_version\'] = \':version\'; from your config.php file',
                 'ok' => 'rrdtool version ok',
             ],

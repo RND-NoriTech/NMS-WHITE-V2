@@ -121,7 +121,7 @@ return [
         'active_directory' => [
             'users_purge' => [
                 'description' => 'Keep inactive users for',
-                'help' => 'Users will be deleted from LibreNMS after this many days of not logging in. 0 means never and users will be recreated if the user logs back in.',
+                'help' => 'Users will be deleted from NMS-WHITE after this many days of not logging in. 0 means never and users will be recreated if the user logs back in.',
             ],
         ],
         'addhost_alwayscheckip' => [
@@ -623,11 +623,11 @@ return [
         ],
         'collectd_dir' => [
             'description' => 'Collectd Directory',
-            'help' => 'Directory where collectd stores its RRD files.  This is used to display data from collectd into LibreNMS.',
+            'help' => 'Directory where collectd stores its RRD files.  This is used to display data from collectd into NMS-WHITE.',
         ],
         'collectd_sock' => [
             'description' => 'Collectd Socket',
-            'help' => 'Socket collectd is listening on.  This is used to display data from collectd into LibreNMS.',
+            'help' => 'Socket collectd is listening on.  This is used to display data from collectd into NMS-WHITE.',
         ],
         'core_descr' => [
             'description' => 'Core Port Types',
@@ -1535,7 +1535,7 @@ return [
         ],
         'mydomain' => [
             'description' => 'Primary Domain',
-            'help' => 'This domain is used for network auto-discovery and other processes. LibreNMS will attempt to append it to unqualified hostnames.',
+            'help' => 'This domain is used for network auto-discovery and other processes. NMS-WHITE will attempt to append it to unqualified hostnames.',
         ],
         'network_map_show_on_worldmap' => [
             'description' => 'Display network links on the map',
@@ -1621,7 +1621,7 @@ return [
             'help' => 'Show the sysDescr on the device overview page',
         ],
         'own_hostname' => [
-            'description' => 'LibreNMS hostname',
+            'description' => 'NMS-WHITE hostname',
             'help' => 'Should be set to the hostname/ip the librenms server is added as',
         ],
         'oxidized' => [
@@ -1962,7 +1962,7 @@ return [
             ],
             'xdp' => [
                 'description' => 'Enable xDP discovery protocols',
-                'help' => 'Use LLDP, CDP, etc protocols to discover network topology and neighbors and add them to LibreNMS',
+                'help' => 'Use LLDP, CDP, etc protocols to discover network topology and neighbors and add them to NMS-WHITE',
             ],
             'xdp_exclude' => [
                 'sysname_regexp' => [
@@ -2060,7 +2060,7 @@ return [
         ],
         'rrdtool_version' => [
             'description' => 'Sets the version of rrdtool on your server',
-            'help' => 'Anything over 1.5.5 supports all features LibreNMS uses, do not set higher than your installed version',
+            'help' => 'Anything over 1.5.5 supports all features NMS-WHITE uses, do not set higher than your installed version',
         ],
         'schedule_type' => [
             'alerting' => [
@@ -2122,7 +2122,7 @@ return [
         'sensors' => [
             'guess_limits' => [
                 'description' => 'Guess sensor limits',
-                'help' => 'If enabled, LibreNMS will try to guess the sensor limits based on the sensor type and value. This is not always accurate and may lead to incorrect limits.',
+                'help' => 'If enabled, NMS-WHITE will try to guess the sensor limits based on the sensor type and value. This is not always accurate and may lead to incorrect limits.',
             ],
         ],
         'service_master_timeout' => [
@@ -2191,7 +2191,7 @@ return [
         ],
         'service_watchdog_log' => [
             'description' => 'Log File to Watch',
-            'help' => 'Default is the LibreNMS log file. Sets the default value for all nodes.',
+            'help' => 'Default is the NMS-WHITE log file. Sets the default value for all nodes.',
         ],
         'service_health_file' => [
             'description' => 'Service Health File',
